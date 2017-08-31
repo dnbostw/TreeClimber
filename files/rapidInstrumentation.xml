@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <extension xmlns="https://newrelic.com/docs/java/xsd/v1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="newrelic-extension extension.xsd"
+    name="rapidExtension"
+    version="2.0"    enabled="true">
+    <instrumentation>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <className>edu.emory.rhsit.rapid.shared.util.StringUtils</className>
+          <method>
+            <name>append</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String[]</type>
+            </parameters>
+          </method>
+          <method>
+            <name>join</name>
+            <parameters>
+              <type attributeName="param0">java.util.List</type>
+              <type attributeName="param1">java.lang.String</type>
+            </parameters>
+          </method>
+      </pointcut>
+    </instrumentation>
+  </extension>
+

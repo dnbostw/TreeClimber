@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="1157.0" stylesheets="@../../css/stylein.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="treeclimber.TreeClimberController">
+   <top>
+      <Pane fx:id="headerPane" prefHeight="121.0" prefWidth="1157.0" styleClass="mainBorderPane" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="29.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Context:" />
+            <ComboBox fx:id="context" layoutX="29.0" layoutY="33.0" onAction="#handleContextChange" prefWidth="150.0" styleClass="glass-grey" />
+            <Button fx:id="editPackages" layoutX="785.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleEditPackages" styleClass="bevel-grey" text="Edit" />
+            <RadioButton fx:id="includes" layoutX="214.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleIncludeList" text="Include Packages" />
+            <RadioButton fx:id="excludes" layoutX="389.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleExcludeList" text="Exclude Packages" />
+            <ListView fx:id="packageList" layoutX="214.0" layoutY="36.0" prefHeight="76.0" prefWidth="559.0" />
+            <Button fx:id="importContext" layoutX="81.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleImportContext" styleClass="bevel-grey" text="Import" />
+            <Button fx:id="generateInstrumentaion" layoutX="900.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleGenerateInstrumentation" styleClass="bevel-grey" text="Generate NewRelic Instrumentation" />
+            <RadioButton fx:id="methods" layoutX="565.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleMethodList" text="Methods Named" />
+         </children></Pane>
+   </top>
+   <center>
+            <SplitPane fx:id="splitPane" dividerPositions="0.5271929824561403" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="486.0" prefWidth="1154.0" styleClass="mainPane">
+              <items>
+                <Pane fx:id="masterPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="603.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Text fill="#3c4a75" layoutX="14.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Packages/Classes/Methods" wrappingWidth="336.21875" />
+                        <ScrollPane fx:id="masterScrollPane" fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="565.0">
+                        <content>
+                            <TreeView fx:id="masterTree" layoutX="14.0" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" onMouseClicked="#handleMasterTreeClicked" prefHeight="416.0" prefWidth="563.0" />
+                        </content>
+                        </ScrollPane>
+                    </children>
+               <opaqueInsets>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </opaqueInsets>
+                </Pane>
+                <Pane fx:id="detailPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="460.0" prefWidth="533.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Text fx:id="detailText" fill="#3c4a75" layoutX="14.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Call tree for: " wrappingWidth="336.21875" />
+                        <ScrollPane fx:id="detailScrollPane" fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="31.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="393.0" prefWidth="510.0">
+                        <content>
+                            <TreeView fx:id="detailTree" layoutX="14.0" layoutY="32.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="391.0" prefWidth="493.0" />
+                        </content>
+                        </ScrollPane>
+                        <ComboBox fx:id="nestingLimit" layoutX="105.0" layoutY="431.0" onAction="#handleNestingLimitChange" prefHeight="27.0" prefWidth="56.0" styleClass="glass-grey">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="2" />
+                                    <String fx:value="3" />
+                                    <String fx:value="4" />
+                                    <String fx:value="5" />
+                                    <String fx:value="6" />
+                                    <String fx:value="7" />
+                                    <String fx:value="8" />
+                                    <String fx:value="9" />
+                                    <String fx:value="10" />
+                                </FXCollections> 
+                            </items>
+                        </ComboBox>
+                  <Text fx:id="detailText1" fill="#3c4a75" layoutX="14.0" layoutY="449.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max Nesting:" wrappingWidth="85.21875" />
+                  <Button fx:id="refreshDetailButton" layoutX="182.0" layoutY="431.0" mnemonicParsing="false" onAction="#handleDetailRefresh" styleClass="bevel-grey" text="Refresh" />
+                            
+                    </children>
+               <opaqueInsets>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </opaqueInsets>
+                </Pane>
+              </items>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="2.0" right="1.0" top="2.0" />
+         </padding>
+            </SplitPane>
+   </center>
+   <bottom>
+      <Pane fx:id="footerPane" prefHeight="42.0" prefWidth="1154.0" styleClass="mainBorderPane" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="status" layoutX="7.0" layoutY="13.0" prefHeight="17.0" prefWidth="778.0" text="" />
+         </children></Pane>
+   </bottom>
+   <padding>
+      <Insets bottom="2.0" left="1.0" right="2.0" top="1.0" />
+   </padding>
+</BorderPane>

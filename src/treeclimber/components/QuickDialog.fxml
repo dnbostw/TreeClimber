@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import treeclimber.components.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="308.0" prefWidth="399.0" stylesheets="@../../../css/stylein.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Pane prefHeight="80.0" prefWidth="600.0" styleClass="outlinedPane" stylesheets="css/stylein.css" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="45.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Extension Instrumentation Meta Data">
+               <font>
+                  <Font name="YuGothic Medium" size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </top>
+   <bottom>
+      <Pane prefHeight="62.0" prefWidth="600.0" styleClass="outlinedPane" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="defaultButton" layoutX="35.0" layoutY="18.0" mnemonicParsing="false" onAction="#resetDefaultValues" text="Default" />
+            <Button fx:id="cancelButton" layoutX="169.0" layoutY="18.0" mnemonicParsing="false" onAction="#cancelEdits" text="Cancel" />
+            <Button fx:id="saveButton" layoutX="317.0" layoutY="18.0" mnemonicParsing="false" onAction="#saveEdits" text="Save" />
+         </children>
+      </Pane>
+   </bottom>
+   <center>
+       <GridPane fx:id="workspace" prefHeight="170.0" prefWidth="400.0" styleClass="regularPane" BorderPane.alignment="CENTER" />
+   </center>
+   <opaqueInsets>
+      <Insets left="5.0" right="5.0" />
+   </opaqueInsets>
+   <right>
+      <Pane prefHeight="166.0" prefWidth="84.0" styleClass="regularPane" BorderPane.alignment="CENTER" />
+   </right>
+   <left>
+      <Pane prefHeight="166.0" prefWidth="41.0" styleClass="regularPane" BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

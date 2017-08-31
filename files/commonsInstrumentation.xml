@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <extension xmlns="https://newrelic.com/docs/java/xsd/v1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="newrelic-extension extension.xsd"
+    name="commonsExtension"
+    version="1.0"    enabled="true">
+    <instrumentation>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>buildRoleDTOList</name>
+            <parameters>
+              <type attributeName="param0">java.util.List</type>
+              <type attributeName="param1">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+          <method>
+            <name>convertCommonsPerson</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.server.entity.commons.CommonsPerson</type>
+              <type attributeName="param1">boolean</type>
+            </parameters>
+          </method>
+          <method>
+            <name>convertRole</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.server.entity.commons.PersonRole</type>
+              <type attributeName="param1">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>addEirbAssociatedSystem</name>
+            <parameters>
+              <type attributeName="param0">java.lang.Long</type>
+              <type attributeName="param1">edu.emory.commons.portal.client.dto.eirb.IrbProposalDTO</type>
+              <type attributeName="param2">javax.persistence.EntityManager</type>
+              <type attributeName="param3">java.lang.String</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getObjectValue</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getPermissionFlags</name>
+          </method>
+          <method>
+            <name>getOrgCascadeFlag</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getCacheByType</name>
+            <parameters>
+              <type attributeName="param0">int</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getUserInfo</name>
+          </method>
+          <method>
+            <name>getJSessionId</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getCurrentUser</name>
+            <parameters>
+              <type attributeName="param0">boolean</type>
+            </parameters>
+          </method>
+          <method>
+            <name>getCurrentUserEppn</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>isNullOrEmpty</name>
+            <parameters>
+              <type attributeName="param0">java.lang.Object</type>
+            </parameters>
+          </method>
+          <method>
+            <name>isEmptyString</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>setAssociatedPi</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.client.dto.PersonDTO</type>
+            </parameters>
+          </method>
+          <method>
+            <name>setPerson</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.client.dto.PersonDTO</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>removeIrbProposal</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+            </parameters>
+          </method>
+          <method>
+            <name>getIrbProposals</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>checkTimeout</name>
+          </method>
+          <method>
+            <name>getCurrentUserEppn</name>
+          </method>
+          <method>
+            <name>addEirbAssociatedSystem</name>
+            <parameters>
+              <type attributeName="param0">java.lang.Long</type>
+              <type attributeName="param1">java.lang.String</type>
+              <type attributeName="param2">java.lang.String</type>
+              <type attributeName="param3">int</type>
+              <type attributeName="param4">edu.emory.commons.portal.client.dto.eirb.IrbProposalDTO</type>
+            </parameters>
+          </method>
+          <method>
+            <name>getServletSession</name>
+          </method>
+          <method>
+            <name>updateCacheForEirb</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+              <type attributeName="param1">java.lang.String</type>
+              <type attributeName="param2">java.lang.Object</type>
+              <type attributeName="param3">boolean</type>
+            </parameters>
+          </method>
+          <method>
+            <name>rollback</name>
+            <parameters>
+              <type attributeName="param0">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getValue</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+            </parameters>
+          </method>
+          <method>
+            <name>getUserEppn</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>flagToBoolean</name>
+            <parameters>
+              <type attributeName="param0">java.lang.Character</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>setPersonService</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.server.service.PersonService</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getId</name>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getRolesForPublicId</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+              <type attributeName="param1">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+          <method>
+            <name>getRoleDTOsForPublicId</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+              <type attributeName="param1">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+          <method>
+            <name>updateRolesForPerson</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.client.dto.PersonDTO</type>
+              <type attributeName="param1">javax.persistence.EntityManager</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getValueFor</name>
+            <parameters>
+              <type attributeName="param0">java.lang.Object</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>getEpexIdFromKey</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+            </parameters>
+          </method>
+          <method>
+            <name>updateCachedProposalEirb</name>
+            <parameters>
+              <type attributeName="param0">java.lang.String</type>
+              <type attributeName="param1">java.lang.String</type>
+              <type attributeName="param2">int</type>
+              <type attributeName="param3">java.lang.Object</type>
+              <type attributeName="param4">boolean</type>
+            </parameters>
+          </method>
+      </pointcut>
+      <pointcut transactionStartPoint="false"
+        ignoreTransaction="false"
+        excludeFromTransactionTrace="false">
+        <interfaceName></interfaceName>
+          <method>
+            <name>setUser</name>
+            <parameters>
+              <type attributeName="param0">edu.emory.commons.portal.client.dto.PersonDTO</type>
+            </parameters>
+          </method>
+      </pointcut>
+    </instrumentation>
+  </extension>
+

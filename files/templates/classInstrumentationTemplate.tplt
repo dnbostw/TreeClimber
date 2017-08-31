@@ -1,0 +1,9 @@
+    <pointcut transactionStartPoint="?transactionStartPoint?" 
+        ignoreTransaction="?ignoreTransaction?"
+        excludeFromTransactionTrace="?excludeFromTransactionTrace?"
+        metricNameFormat="?metricNameFormat?">
+
+        <className>?className?</className>
+#methodList#
+    </pointcut>
+

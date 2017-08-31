@@ -1,0 +1,23 @@
+   <pointcut transactionStartPoint="?transactionStartPoint?">
+ 
+      <!--class name is preceded by package name-->
+      <className>?className?</className>
+      <method>
+        <name>?methodName?</name>
+        <parameters>
+          <type attributeName="?paramName?">?paramType?</type>
+          <type>long[]</type>
+        </parameters>
+        <returnType>
+          <type attributeName="?paramName?">?paramType?</type>
+        </returnType>
+      </method>
+      <!--two methods with the same name but different signatures can share one node-->
+      <method>
+        <name>getFirst</name>
+      </method>
+      <method>
+        <name>run</name>
+      </method>
+    </pointcut>
+
