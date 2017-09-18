@@ -165,10 +165,12 @@ public class TreeClimber extends Application {
 //        String fullMethod2 = fp.parseFullMethodName(rawField2, 2);
 //        String packageName = fp.parsePackage(line);
 //        String className = fp.parseClass(line);
-        ComboBox context = new ObjectUtilities<ComboBox>().getObject(root, ComboBox.class, "context");
-        ObservableList<String> contextItems = FXCollections.observableArrayList("commons","rapid");
-        context.setItems(contextItems);
-        context.setVisible(true);
+
+//        ComboBox context = new ObjectUtilities<ComboBox>().getObject(root, ComboBox.class, "context");
+//        ObservableList<String> contextItems = FXCollections.observableArrayList("commons","rapid");
+//        context.setItems(contextItems);
+//        context.setVisible(true);
+        
 //        Pane masterPane = new ObjectUtilities<Pane>().getObject(root, Pane.class, "masterPane");
 //        Pane detailPane = new ObjectUtilities<Pane>().getObject(root, Pane.class, "detailPane");
 //        TreeView masterTree = new ObjectUtilities<TreeView>().getObject(masterPane, TreeView.class, "masterTree");

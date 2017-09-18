@@ -13,15 +13,16 @@
    <top>
       <Pane fx:id="headerPane" prefHeight="121.0" prefWidth="1157.0" styleClass="mainBorderPane" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="29.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Context:" />
-            <ComboBox fx:id="context" layoutX="29.0" layoutY="33.0" onAction="#handleContextChange" prefWidth="150.0" styleClass="glass-grey" />
-            <Button fx:id="editPackages" layoutX="785.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleEditPackages" styleClass="bevel-grey" text="Edit" />
-            <RadioButton fx:id="includes" layoutX="214.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleIncludeList" text="Include Packages" />
-            <RadioButton fx:id="excludes" layoutX="389.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleExcludeList" text="Exclude Packages" />
-            <ListView fx:id="packageList" layoutX="214.0" layoutY="36.0" prefHeight="76.0" prefWidth="559.0" />
-            <Button fx:id="importContext" layoutX="81.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleImportContext" styleClass="bevel-grey" text="Import" />
-            <Button fx:id="generateInstrumentaion" layoutX="900.0" layoutY="41.0" mnemonicParsing="false" onAction="#handleGenerateInstrumentation" styleClass="bevel-grey" text="Generate NewRelic Instrumentation" />
-            <RadioButton fx:id="methods" layoutX="565.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleMethodList" text="Methods Named" />
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Context:" />
+            <ComboBox fx:id="context" layoutX="14.0" layoutY="36.0" onAction="#handleContextChange" prefHeight="27.0" prefWidth="216.0" styleClass="glass-grey" />
+            <Button fx:id="editPackages" layoutX="827.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleEditPackages" styleClass="bevel-grey" text="Edit" />
+            <RadioButton fx:id="includes" layoutX="256.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleIncludeList" text="Include Packages" />
+            <RadioButton fx:id="excludes" layoutX="431.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleExcludeList" text="Exclude Packages" />
+            <ListView fx:id="packageList" layoutX="256.0" layoutY="34.0" prefHeight="76.0" prefWidth="559.0" />
+            <Button fx:id="importContext" layoutX="119.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleImportContext" styleClass="bevel-grey" text="Import Context" />
+            <Button fx:id="generateInstrumentaion" layoutX="904.0" layoutY="39.0" mnemonicParsing="false" onAction="#handleGenerateInstrumentation" styleClass="bevel-grey" text="Generate NewRelic Instrumentation" />
+            <RadioButton fx:id="methods" layoutX="607.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleMethodList" text="Methods Named" />
+            <Button fx:id="editContext" layoutX="14.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleEditContext" styleClass="bevel-grey" text="Edit Context" />
          </children></Pane>
    </top>
    <center>
@@ -64,7 +65,7 @@
                             </items>
                         </ComboBox>
                   <Text fx:id="detailText1" fill="#3c4a75" layoutX="14.0" layoutY="449.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max Nesting:" wrappingWidth="85.21875" />
-                  <Button fx:id="refreshDetailButton" layoutX="182.0" layoutY="431.0" mnemonicParsing="false" onAction="#handleDetailRefresh" styleClass="bevel-grey" text="Refresh" />
+                  <Button fx:id="refreshDetailButton" layoutX="182.0" layoutY="431.0" mnemonicParsing="false" onAction="#handleDetailRefresh" prefHeight="27.0" prefWidth="108.0" styleClass="bevel-grey" text="Refresh Tree" />
                             
                     </children>
                <opaqueInsets>

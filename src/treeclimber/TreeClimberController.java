@@ -43,16 +43,17 @@ import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import static treeclimber.Core.mainStage;
+import treebuilder.TreeBuilder;
 import treeclimber.components.ClassPanel;
+import treeclimber.components.ContextData;
+import treeclimber.components.ContextPanel;
 import treeclimber.components.EditExcludesData;
 import treeclimber.components.EditExcludesPanel;
 import treeclimber.components.InstrumentationPanel;
 import treeclimber.newrelic.ClassDescriptor;
 import treeclimber.newrelic.InstrumentationDescriptor;
 import utilities.FileUtilities;
+import utilities.FormatUtilities;
 import utilities.ListMapHandler;
 
 /**
@@ -100,7 +101,7 @@ public class TreeClimberController implements Initializable {
     @FXML
     private RadioButton methods;
 
-    private Button editPackages, refreshDetailButton;
+    private Button editPackages, refreshDetailButton, importContext, editContext;
 
     @FXML
     public void handleIncludeList(ActionEvent event) {
@@ -166,7 +167,7 @@ public class TreeClimberController implements Initializable {
         if (document == null) {
             return;
         }
-        FileUtilities.openLog("./files/Selected.log");
+        FileUtilities.openLog(Core.LOG_DIRECTORY.concat(Core.LOG_SELECTED_ITEMS));
 
         for (String item : selected) {
             FileUtilities.log(item);
@@ -175,7 +176,7 @@ public class TreeClimberController implements Initializable {
 
         ListMapHandler classMap = new ListMapHandler();
 
-        BufferedReader mainTemplateReader = FileUtilities.openReadOnlyFile("./files/Selected.log");
+        BufferedReader mainTemplateReader = FileUtilities.openReadOnlyFile(Core.BASE_FILE_DIRECTORY.concat("Selected.log"));
         String mainLine = null;
         while ((mainLine = mainTemplateReader.readLine()) != null) {
             String className = mainLine.substring(0, mainLine.indexOf(":"));
@@ -190,15 +191,15 @@ public class TreeClimberController implements Initializable {
             classDescriptor = classDialog.show();
             document.addPointcut(classDescriptor);
         }
-        String defaultInstrumentationFileName = context.getValue() + "Instrumentation.xml";
-        FileUtilities.openLog("./files/" + defaultInstrumentationFileName);
+        String newRelicfile = Core.NEW_RELIC_DIRECTORY.concat(String.format(Core.NEW_RELIC_DEFAULT_FILE_NAME, Core.getContext().getContextName()));
+        FileUtilities.openLog(newRelicfile);
         FileUtilities.log(document.toString());
         FileUtilities.closeLog();
         String[] extensions = {"*.xml"};
         FileSaver fileSaver = new FileSaver("Save New Relic Instrumentation File",
                 "XML Instrumentation Files (*.xml)",
                 extensions);
-        fileSaver.saveFile("./files/" + defaultInstrumentationFileName);
+        fileSaver.saveFile(newRelicfile);
 
         // java -Djava.ext.dirs=/path/to/jarred/classes -jar newrelic.jar instrument -file /path/to/file.xml -debug true
     }
@@ -209,15 +210,60 @@ public class TreeClimberController implements Initializable {
     }
 
     @FXML
+    public void handleEditContext(ActionEvent event) {
+        // Build edit object and show edit dialog
+        ContextData data = new ContextData(Core.getContext().getData());
+        try {
+            ContextPanel panel = new ContextPanel(Core.getMainWindow(), data);
+            // Get Context data values
+            data = panel.show();
+            panel.close();
+        } catch (Exception ex) {
+            
+        }
+
+    }
+
+    @FXML
     public void handleImportContext(ActionEvent event) {
-        FileChooser fc = new FileChooser();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Context Input File");
-        fileChooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Jar Files", "*.jar"));
-        File selectedFile = fileChooser.showOpenDialog(mainStage);
-        if (selectedFile != null) {
-            status.setText(selectedFile.getName());
+        ContextData data = new ContextData();
+        try {
+            ContextPanel panel = new ContextPanel(Core.getMainWindow(), data);
+            // Get Context data values
+            data = panel.show();
+            panel.close();
+
+         String workingdirectory = Core.BASE_FILE_DIRECTORY.concat(data.getContextName()).concat(File.separator);
+         String jarfilepath = workingdirectory.concat(data.getContextName().concat("Temp.jar"));
+         String treefilepath= workingdirectory.concat(data.getContextName().concat("InputTree.tree"));
+         
+//        this.jarfilepath = workingdirectory.concat(projectname).concat(".jar");
+//        this.treefilepath = workingdirectory.concat(projectname).concat(".tree");
+
+            
+            // Build tree in default location
+            TreeBuilder builder = new TreeBuilder(Core.BASE_FILE_DIRECTORY
+                    , data.getContextPropertiesFileName()
+                    , workingdirectory
+                    , data.getSourceFilepath()
+                    , jarfilepath
+                    , treefilepath);
+//            TreeBuilder builder = new TreeBuilder(data.getContextName(),Core.BASE_FILE_DIRECTORY, data.getSourceFilepath());
+            
+            builder.importProject();
+            ContextData.save(data);
+            FileUtilities.copyBinaryFile(treefilepath
+                    , Core.CONTEXT_DIRECTORY.concat(String.format(Core.CONTEXT_INPUT_TREE_FILE,data.getContextName())));
+            
+            FileUtilities.deleteDir(new File(workingdirectory));
+            
+//            String contextFilename = Core.CONTEXT_DIRECTORY.concat(String.format(Core.CONTEXT_PROPERTIES_FILE,data.getContextName()));
+//            File   contextFile = new File(contextFilename);
+            updateContextMenu();
+            context.getSelectionModel().select(data.getContextName());
+            
+        } catch (Exception ex) {
+            status.setText(ex.getMessage().substring(0, 128));
         }
     }
 
@@ -240,7 +286,7 @@ public class TreeClimberController implements Initializable {
                         boolean first = true;
                         int maxLevel = 0;
                         if (methodList != null) {
-                            FileUtilities.openLog("./files/TreeClimber.log");
+                            FileUtilities.openLog(Core.LOG_DIRECTORY.concat(Core.LOG_FILE_NAME));
                             for (String line : methodList) {
                                 FileUtilities.log(line);
                                 int lvl = Integer.valueOf(line.substring(0, line.indexOf(">")));
@@ -442,6 +488,16 @@ public class TreeClimberController implements Initializable {
         }
     }
 
+    private void updateContextMenu() {
+        List<String> c = FileUtilities.findFilesContaining("Context.properties", Core.CONTEXT_DIRECTORY);
+        Set<String> contextNames = new TreeSet<String>();
+        for (String s : c) {
+            contextNames.add(FormatUtilities.stripAllExcept(s, "Context.properties"));
+        }
+        ObservableList<String> contexts = FXCollections.observableArrayList(contextNames);
+        context.setItems(contexts);
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ToggleGroup group = new ToggleGroup();
@@ -488,8 +544,9 @@ public class TreeClimberController implements Initializable {
         detailTree.setVisible(
                 true);
 
+        updateContextMenu();
         try {
-            FileUtilities.openLog("./files/TreeClimber.log");
+            FileUtilities.openLog(Core.LOG_FILE_NAME.concat(Core.LOG_FILE_NAME));
         } catch (IOException ex) {
             Logger.getLogger(TreeClimberController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -37,7 +37,9 @@ public class InstrumentationPanel extends QuickDialog<InstrumentationDescriptor>
    }
    @FXML  public void saveEdits(ActionEvent event) {
         updateInstanceFromView();
-        close();
+        if (isValid()) {
+            close();
+        }
    }
    @FXML  public void cancelEdits(ActionEvent event) {
        restoreInstance();
@@ -88,5 +90,10 @@ public class InstrumentationPanel extends QuickDialog<InstrumentationDescriptor>
 
     @Override
     public void initialize() {
+    }
+
+    @Override
+    public String validate(InstrumentationDescriptor instance) {
+        return null;
     }
 }

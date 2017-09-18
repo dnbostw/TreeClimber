@@ -50,9 +50,12 @@ public class EditExcludesPanel extends QuickDialog<EditExcludesData> { // Border
         restoreInstance();
         updateViewFromInstance();
    }
+
    @FXML  public void saveEdits(ActionEvent event) {
         updateInstanceFromView();
-        dialogStage.close();
+        if (isValid()) {
+            dialogStage.close();
+        }
    }
    @FXML  public void cancelEdits(ActionEvent event) {
        setInstance(null);
@@ -95,5 +98,10 @@ public class EditExcludesPanel extends QuickDialog<EditExcludesData> { // Border
 
     @Override
     public void initialize() {
+    }
+
+    @Override
+    public String validate(EditExcludesData instance) {
+        return null;
     }
 }

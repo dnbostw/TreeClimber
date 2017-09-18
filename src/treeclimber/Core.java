@@ -26,6 +26,25 @@ import utilities.FileUtilities;
  */
 public class Core {
 
+    public final static String TMP_DIRECTORY="/tmp";
+    public final static String BASE_FILE_DIRECTORY="./files/";
+    public final static String PARSERS_DIRECTORY=BASE_FILE_DIRECTORY.concat("parsers/");
+    public final static String CONTEXT_DIRECTORY=BASE_FILE_DIRECTORY.concat("context/");
+    public final static String CONTEXT_PROPERTIES_FILE="%sContext.properties";
+    public final static String CONTEXT_INPUT_TREE_FILE="%sInputTree.tree";
+    public final static String CONTEXT_OUTPUT_TREE_FILE="%sOutputTree.tree";
+    public final static String LOG_DIRECTORY=BASE_FILE_DIRECTORY.concat("log/");
+    public final static String LOG_FILE_NAME="TreeClimber.log";
+    public final static String LOG_SELECTED_ITEMS="Selected.log";
+    public final static String NEW_RELIC_DIRECTORY=BASE_FILE_DIRECTORY.concat("newrelic/");
+    public final static String NEW_RELIC_DEFAULT_FILE_NAME="%sInstrumentation.xml";
+    public final static String DEFAULT_PARSER_NAME="treeclimber.parsers.DefaultFieldParser";
+    public final static String VALIDATION_ERROR_MESSSAGE="%s#%s#%s"; // error title # error header # error message
+    public final static int    VALIDATION_ERROR_TITLE=0;
+    public final static int    VALIDATION_ERROR_HEADER=1;
+    public final static int    VALIDATION_ERROR_MESSAGE=2;
+    
+    
     private static LineParser lineParser = new LineParser();
 
     private static Set<String> packages;
@@ -213,7 +232,7 @@ public class Core {
         BufferedReader br = null;
         List<String> rawInput = null;
         try {
-            br = FileUtilities.openReadOnlyFile(lineParser.getContext().getInputMethodTreeFileName());
+            br = FileUtilities.openReadOnlyFile(lineParser.getContext().getInputTreePath());
             rawInput = lineParser.getContext().getRawInput();
             rawInput.clear();
             String line = null;

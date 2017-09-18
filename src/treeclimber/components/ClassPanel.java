@@ -45,7 +45,9 @@ public class ClassPanel extends QuickDialog<ClassDescriptor> { // BorderPane {
    }
    @FXML  public void saveEdits(ActionEvent event) {
        updateInstanceFromView();
-       close();
+       if (isValid()) {
+            close();
+       }
    }
    @FXML  public void cancelEdits(ActionEvent event) {
        restoreInstance();
@@ -116,5 +118,10 @@ public class ClassPanel extends QuickDialog<ClassDescriptor> { // BorderPane {
     @Override
     public void initialize() {
         transactionTypeComboBox.setValue("background");
+    }
+
+    @Override
+    public String validate(ClassDescriptor instance) {
+        return null;
     }
 }

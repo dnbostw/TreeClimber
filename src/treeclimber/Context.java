@@ -5,6 +5,7 @@
  */
 package treeclimber;
 
+import com.newrelic.agent.deps.com.google.common.util.concurrent.SettableFuture;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import treeclimber.components.ContextData;
 import treeclimber.parsers.FieldParser;
 import utilities.FileUtilities;
 
@@ -22,15 +24,21 @@ import utilities.FileUtilities;
  */
 public class Context {
 
-    private String context;
+    private ContextData data;
+    
     private FieldParser fieldParser;
-    private Set<String>  methodExcludeList;
-    private Set<String>  packageBlackList;
-    private Set<String>  packageWhitelist;
+//    private Set<String>  methodExcludeList;
+//    private Set<String>  packageBlackList;
+//    private Set<String>  packageWhitelist;
     private List<String> rawInput;
   
+    Context() {
+        data = new ContextData();
+    }
+    
     Context(String context) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
-       setContext(context);
+        this();
+        setContext(context);
     }
 
     private String inputContextFileName;
@@ -43,48 +51,53 @@ public class Context {
         this.inputContextFileName = inputContextFileName;
     }
     
-    public String getContext() {
-        return context;
+    public void setContextName(String name) {
+        data.setContextName(name);
     }
-    private String inputMethodTreeFileName;
-
-    public String getInputMethodTreeFileName() {
-        return inputMethodTreeFileName;
+    
+    public String getContextName() {
+        return data.getContextName(); // name;
     }
+    
+//    private String inputTreePath;
 
-    public void setInputMethodTreeFileName(String inputMethodTreeFileName) {
-        this.inputMethodTreeFileName = inputMethodTreeFileName;
-    }
-
-    public String getOutputMethodTreeFileName() {
-        return outputMethodTreeFileName;
+    public String getInputTreePath() {
+        return data.getInputTreepath(); // inputTreePath;
     }
 
-    public void setOutputMethodTreeFileName(String outputMethodTreeFileName) {
-        this.outputMethodTreeFileName = outputMethodTreeFileName;
+    public void setInputTreePath(String inputTreePath) {
+        data.setInputTreepath(inputTreePath); // this.inputTreePath = inputTreePath;
+    }
+
+    public String getOutputTreePath() {
+        return data.getOutputTreepath();
+//        return outputTreePath;
+    }
+
+    public void setOutputTreePath(String outputTreePath) {
+        data.setOutputTreepath(outputTreePath);
+//        this.outputTreePath = outputTreePath;
     }
 
     public String getFieldParserName() {
-        return fieldParserName;
+        return data.getFieldParserName();
+//        return fieldParserName;
     }
 
     public void setFieldParserName(String fieldParserName) {
-        this.fieldParserName = fieldParserName;
+        data.setFieldParserName(fieldParserName);
+//        this.fieldParserName = fieldParserName;
     }
     
-    private String outputMethodTreeFileName;
-    private String fieldParserName;
+//    private String outputTreePath;
+//    private String fieldParserName;
 
     public void setContext(String context) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
         loadContext(context);
     }
 
     private void loadContext(String context) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
-        this.context=context;
         initializeContext(context);
-//        createInputMethodTreeFileName();
-//        createOutputMethodTreeFileName();
-//        createFieldParserName();
     }
 
     private Properties config = new Properties();
@@ -95,125 +108,67 @@ public class Context {
     
     private void initializeContext(String context) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         //  Example:  CommonsInputTree.txt
-        inputContextFileName = "./files/context/".concat(context.substring(0, 1).toUpperCase().concat(context.substring(1).toLowerCase()).concat("Context.properties"));
-        Properties config = new Properties();
-        Reader in = (Reader)FileUtilities.openReadOnlyFile(inputContextFileName);
-        config.load(in);
-        this.fieldParserName=config.getProperty("fieldParserName");
-        this.inputMethodTreeFileName=config.getProperty("inputMethodTreeFileName");
-        this.outputMethodTreeFileName=config.getProperty("outputMethodTreeFileName");
+        ContextData _data = ContextData.parse(context);
+        
+        this.inputContextFileName=_data.getContextPropertiesFileName();
+        setInputContextFileName(_data.getContextPropertiesFileName());
+        setFieldParserName(_data.getFieldParserName());
+        setInputTreePath(_data.getInputTreepath());
+        setOutputTreePath(_data.getOutputTreepath());
+        setMethodExcludeList(_data.getMethodExcludelist());
+        setPackageBlacklist(_data.getBlacklist());
+        setPackageWhitelist(_data.getWhitelist());
         loadFieldParser();
-        String[] _methodExcludeList = config.getProperty("methodExcludeList").split(",");
-        clearMethodExcludeList();
-        for (String _item : _methodExcludeList) {
-            addToMethodExcludeList(_item);
-        }
-        String[] _blackList = config.getProperty("blackList").split(",");
-        clearPackageBlacklist();
-        for (String _item : _blackList) {
-            addToPackageBlacklist(_item);
-        }
-        String[] _whiteList = config.getProperty("whiteList").split(",");
-        clearPackageWhitelist();
-        for (String _item : _whiteList) {
-            addToPackageWhitelist(_item);
-        }
+        
     }
     
     public void saveContext() throws IOException {
-        FileWriter fw = FileUtilities.openWriteOnlyFile(inputContextFileName);
-        fw.write("contextName=".concat(context).concat("\n"));
-        fw.write("inputMethodTreeFileName=".concat(inputMethodTreeFileName).concat("\n"));
-        fw.write("outputMethodTreeFileName=".concat(outputMethodTreeFileName).concat("\n"));
-        fw.write("fieldParserName=".concat(fieldParserName).concat("\n"));
-        int i = 0;
-        fw.write("methodExcludeList=");
-        for (String _item : getMethodExcludelist()) {
-            fw.write(_item);
-            if (i < (getMethodExcludelist().size()-1)) {
-                fw.write(",");
-            }
-            ++i;
-        }
-        fw.write("\n");
-        fw.write("blackList=");
-        for (String _item : getPackageBlacklist()) {
-            fw.write(_item);
-            if (i < (getPackageBlacklist().size()-1)) {
-                fw.write(",");
-            }
-            ++i;
-        }
-        fw.write("\n");
-        i = 0;
-        fw.write("whiteList=");
-        for (String _item : getPackageWhitelist()) {
-            fw.write(_item);
-            if (i < (getPackageWhitelist().size()-1)) {
-                fw.write(",");
-            }
-            ++i;
-        }
-        fw.write("\n");
-        FileUtilities.closeWriteOnlyFile(fw);
-        
-    }
-
-    private void createInputMethodTreeFileName() {
-        //  Example:  CommonsInputTree.txt
-        inputMethodTreeFileName = "./files/".concat(context.substring(0, 1).toUpperCase().concat(context.substring(1).toLowerCase()).concat("InputTree.txt"));
-    }
-
-    private void createOutputMethodTreeFileName() {
-        // Example: CommonsMethodTree.txt
-        outputMethodTreeFileName = "/tmp/".concat(context.substring(0, 1).toUpperCase().concat(context.substring(1).toLowerCase()).concat("MethodTree.txt"));
-    }
-
-    private void createFieldParserName() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        // Example parsers.CommonsFieldParser
-        fieldParserName = "treeclimber.parsers.".concat(context.substring(0, 1).toUpperCase()).concat(context.substring(1)).concat("FieldParser");
-        loadFieldParser();
+        ContextData.save(data);
     }
 
     public FieldParser getFieldParser() {
         return fieldParser;
     }
 
-    public void loadFieldParser() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public final static FieldParser loadFieldParser(String fieldParserName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
             Class _f = Class.forName(fieldParserName);
-            FieldParser _fp = (FieldParser) _f.newInstance();
+            FieldParser result = (FieldParser) _f.newInstance();
+            return result;
+    }
+    
+    public void loadFieldParser() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+            FieldParser _fp = loadFieldParser(getFieldParserName());
             fieldParser = _fp;
     }
 
     public void setMethodExcludeList(Set<String> methodExcludeList) {
-        if (this.methodExcludeList != null) {
-            this.methodExcludeList.clear();
-            this.methodExcludeList=null;
-        }
-        this.methodExcludeList = methodExcludeList;
+        getMethodExcludeList().clear();
+        data.setMethodExcludelist(methodExcludeList);
+    }
+    
+    public void setMethodExcludeList(List<String> list) {
+        setMethodExcludeList(new TreeSet<String>(list));
     }
 
     public void setPackageBlackList(Set<String> packageBlackList) {
-        if (this.packageBlackList != null) {
-            this.packageBlackList.clear();
-            this.packageBlackList=null;
-        }
-        this.packageBlackList = packageBlackList;
+        data.setBlacklist(packageBlackList);
+    }
+
+    public void setPackageWhitelist(List<String> list) {
+        data.setWhitelist(new TreeSet<String>(list));
+    }
+
+    public void setPackageBlacklist(List<String> list) {
+        setPackageBlackList(new TreeSet<String>(list));
     }
 
     public void setPackageWhitelist(Set<String> packageWhitelist) {
-        if (this.packageWhitelist != null) {
-            this.packageWhitelist.clear();
-            this.packageWhitelist=null;
-        }
-        this.packageWhitelist = packageWhitelist;
+        getPackageWhitelist().clear();
+        setPackageWhitelist(data.getWhitelist());
     }
 
     public Set<String> getPackageWhitelist() {
-        if (packageWhitelist == null) {
-            packageWhitelist = new TreeSet<String>();
-        }
-        return packageWhitelist;
+        return new TreeSet<String>(data.getWhitelist());
     }
     
     public void addToPackageWhitelist(String pkg) {
@@ -239,17 +194,11 @@ public class Context {
     }
 
     public Set<String> getMethodExcludelist() {
-        if (methodExcludeList == null) {
-            methodExcludeList = new TreeSet<String>();
-        }
-        return methodExcludeList;
+        return new TreeSet<String>(data.getMethodExcludelist());
     }
     
     public Set<String> getPackageBlacklist() {
-        if (packageBlackList == null) {
-            packageBlackList = new TreeSet<String>();
-        }
-        return packageBlackList;
+        return new TreeSet<String>(data.getBlacklist());
     }
     
     public void addToPackageBlacklist(String pkg) {
@@ -275,10 +224,7 @@ public class Context {
     }
 
     public Set<String> getMethodExcludeList() {
-        if (methodExcludeList == null) {
-            methodExcludeList = new TreeSet<String>();
-        }
-        return methodExcludeList;
+        return new TreeSet<String>(data.getMethodExcludelist());
     }
     
     public void addToMethodExcludeList(String pkg) {
@@ -314,4 +260,7 @@ public class Context {
         this.rawInput = rawInput;
     }
        
+    public ContextData getData() {
+        return this.data;
+    }
 }

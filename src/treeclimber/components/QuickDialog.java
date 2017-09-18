@@ -8,10 +8,13 @@ package treeclimber.components;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import treeclimber.Core;
 import treeclimber.TreeClimber;
 import treeclimber.newrelic.Editable;
 
@@ -50,6 +53,8 @@ public abstract class  QuickDialog<T> extends BorderPane {
         updateViewFromInstance();
     }
 
+    public abstract String validate(T instance);
+    
     public abstract void updateViewFromInstance();
 
     public abstract void updateInstanceFromView();
@@ -84,6 +89,30 @@ public abstract class  QuickDialog<T> extends BorderPane {
     public T show() {
         dialogStage.showAndWait();
         return instance;
+    }
+    
+    public final static String formatValidationErrorMessage(String title, String header, String message) {
+        return String.format(Core.VALIDATION_ERROR_MESSSAGE,title,header,message);
+    }
+    
+    public final static String[] decodeValidationErrorMessage(String message) {
+        if (message == null) return new String[2];
+        String[] result = message.split("#");
+        return result;
+    }
+    
+    protected boolean isValid() {
+        String error = validate(getInstance());
+        if (error != null) {
+            String[] text = decodeValidationErrorMessage(error);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle(text[Core.VALIDATION_ERROR_TITLE]);
+            alert.setHeaderText(text[Core.VALIDATION_ERROR_HEADER]);
+            alert.setContentText(text[Core.VALIDATION_ERROR_MESSAGE]);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
     
     public void close() {

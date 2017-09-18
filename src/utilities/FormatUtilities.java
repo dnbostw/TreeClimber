@@ -10,12 +10,20 @@ package utilities;
  * @author djehuty
  */
 public class FormatUtilities {
-       public static String getTabs(int num) {
+
+    public static final String getTabs(int num) {
         String tabs = "";
         while (num-- > 0) {
             tabs = tabs.concat("\t");
         }
         return tabs;
     }
- 
+    
+    public static final String stripAllExcept(String target, String token) {
+        if (target.contains(token)) {
+            return target.replace(token, "");
+        }
+        return target;
+    }
+
 }
